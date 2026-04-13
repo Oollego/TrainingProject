@@ -1,0 +1,83 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TrainingProject.Application.Dto;
+using TrainingProject.Application.Interfaces;
+
+namespace TrainingProject.Presentation.Controllers
+{
+    [ApiController]
+    [Route("api/vehicles")]
+    public class VehicleController : ControllerBase
+    {
+        private readonly ILogger<VehicleController> _logger;
+        private readonly IVehicleService _vehicleService;
+
+        public VehicleController(IVehicleService vehicleService, ILogger<VehicleController> logger)
+        {
+            _vehicleService = vehicleService;
+            _logger = logger;
+        }
+
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult> GetVehicle(Guid Id)
+        {
+            _logger.LogInformation("Getting vehicle with id {Id}", Id);
+
+
+            var vehicle = await _vehicleService.GetVehicleDtoAsync(Id);
+
+
+            if (vehicle == null)
+            {
+                _logger.LogWarning("Vehicle with id {Id} not found", Id);
+                return NotFound();
+            }
+
+            return Ok(vehicle);
+        }
+
+        [HttpGet("quantity{quantity}/page{page}")]
+        public async Task<ActionResult> GetVehicles(int quantity, int page)
+        {
+            _logger.LogInformation("Getting list of vehicles with quantity {quantity} and page {page}", quantity, page);
+
+            var vehicles = await _vehicleService.GetListOfVehiclesAsync(quantity, page);
+
+            if (vehicles.Count == 0)
+            {
+                _logger.LogWarning($"{nameof(GetVehicles)} Count 0");
+                return NotFound();
+            }
+
+            return Ok(vehicles);
+        }
+
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteVehicle(Guid Id)
+        {
+            _logger.LogInformation("Deletting vehicle by Id: {Id}", Id);
+
+            await _vehicleService.DeleteVehicleAsync(Id);
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateVehicle(VehicleDto vehicle)
+        {
+            _logger.LogInformation($"Updatting vehicle {vehicle.Id}");
+
+            int rows = await _vehicleService.UpdateVehicleAsync(vehicle);
+
+            if (rows > 0 )
+            {
+                return Ok($"Rows updated {rows}");
+            }
+
+            return NotFound();
+        }
+
+    }
+}
