@@ -21,7 +21,6 @@ namespace TrainingProject.Infrastructure.Persistence.Repositories
 
         public async Task DeleteVehicleAsync(Guid Id)
         {
-            _context.Vehicles.Remove(new Vehicle { Id = Id });
             var vehicle = await _context.Vehicles.FindAsync(Id);
 
             if (vehicle is not null)

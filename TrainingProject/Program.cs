@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Sockets;
+using TrainingProject.Domain.Interfaces;
+using TrainingProject.Infrastructure.Persistence;
+using TrainingProject.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,9 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<DbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TrainDb")));
+builder.Services.AddDbContext<TrainDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TrainDb")));
+
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 var app = builder.Build();
 

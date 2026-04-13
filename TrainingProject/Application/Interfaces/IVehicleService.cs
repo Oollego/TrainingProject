@@ -5,7 +5,7 @@ namespace TrainingProject.Application.Interfaces
 {
     public interface IVehicleService
     {
-        Task<Vehicle> CreateVehicleAsync(CreateRequestVehicleDto vehicle);
+        Task<VehicleDto> CreateVehicleAsync(CreateRequestVehicleDto vehicle);
 
         Task<int> UpdateVehicleAsync(VehicleDto vehicle);
 

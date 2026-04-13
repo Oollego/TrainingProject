@@ -42,7 +42,7 @@ namespace TrainingProject.Domain.Entities
                 throw new ArgumentOutOfRangeException(nameof(year), "Year must be between 1900 and next year.");
             }
 
-            if (mileage < 0)
+            if (mileage <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(mileage), "Mileage cannot be negative.");
             }

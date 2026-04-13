@@ -19,17 +19,17 @@ namespace TrainingProject.Presentation.Controllers
 
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult> GetVehicle(Guid Id)
+        public async Task<ActionResult> GetVehicle(Guid id)
         {
-            _logger.LogInformation("Getting vehicle with id {Id}", Id);
+            _logger.LogInformation("Getting vehicle with id {Id}", id);
 
 
-            var vehicle = await _vehicleService.GetVehicleDtoAsync(Id);
+            var vehicle = await _vehicleService.GetVehicleDtoAsync(id);
 
 
             if (vehicle == null)
             {
-                _logger.LogWarning("Vehicle with id {Id} not found", Id);
+                _logger.LogWarning("Vehicle with id {Id} not found", id);
                 return NotFound();
             }
 
@@ -53,18 +53,28 @@ namespace TrainingProject.Presentation.Controllers
         }
 
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteVehicle(Guid Id)
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> DeleteVehicle(Guid id)
         {
-            _logger.LogInformation("Deletting vehicle by Id: {Id}", Id);
-
-            await _vehicleService.DeleteVehicleAsync(Id);
+            _logger.LogInformation("Deletting vehicle by Id: {Id}", id);
+        
+            await _vehicleService.DeleteVehicleAsync(id);
 
             return Ok();
         }
 
-
         [HttpPost]
+        public async Task<ActionResult<VehicleDto>> CreateVehicle(CreateRequestVehicleDto vehicleDto)
+        {
+            _logger.LogInformation($"Creating vehicle");
+
+            var vehicle = await _vehicleService.CreateVehicleAsync(vehicleDto);
+
+            return CreatedAtAction(nameof(GetVehicle), new { id = vehicle.Id }, vehicle);
+        }
+
+
+        [HttpPut]
         public async Task<ActionResult> UpdateVehicle(VehicleDto vehicle)
         {
             _logger.LogInformation($"Updatting vehicle {vehicle.Id}");

@@ -15,11 +15,13 @@ namespace TrainingProject.Application.Services
         {
             _vehicleRepository = vehicleRepository;
         }
-        public async Task<Vehicle> CreateVehicleAsync(CreateRequestVehicleDto vehicle)
+        public async Task<VehicleDto> CreateVehicleAsync(CreateRequestVehicleDto vehicle)
         {
             var newVehicle = Vehicle.Create(vehicle.Make, vehicle.Model, vehicle.Year, vehicle.Mileage, vehicle.Price);
 
-            return await _vehicleRepository.CreateVehicleAsync(newVehicle);
+            newVehicle = await _vehicleRepository.CreateVehicleAsync(newVehicle);
+
+            return VehicleMapper.MapToVehicleDto(newVehicle);
         }
 
         public async Task DeleteVehicleAsync(Guid Id)
@@ -59,6 +61,8 @@ namespace TrainingProject.Application.Services
 
         public async Task<int> UpdateVehicleAsync(VehicleDto vehicle)
         {
+
+
             return await _vehicleRepository.UpdateVehicleAsync(VehicleMapper.FromVehicleDtoToVehicle(vehicle));
         }
     }
