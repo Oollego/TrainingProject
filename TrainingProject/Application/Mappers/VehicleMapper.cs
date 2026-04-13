@@ -27,13 +27,17 @@ namespace TrainingProject.Application.Mappers
 
         public static Vehicle FromVehicleDtoToVehicle(VehicleDto vehicleDto)
         {
-            return Vehicle.Create(
+            var vehicle = Vehicle.Create(
                 vehicleDto.Make,
                 vehicleDto.Model,
                 vehicleDto.Year,
                 vehicleDto.Mileage,
                 vehicleDto.Price
             );
+
+            vehicle.Id = vehicleDto.Id;
+
+            return vehicle;
         }
     }
 }

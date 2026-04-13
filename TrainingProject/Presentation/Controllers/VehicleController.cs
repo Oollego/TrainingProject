@@ -36,19 +36,18 @@ namespace TrainingProject.Presentation.Controllers
             return Ok(vehicle);
         }
 
-        [HttpGet("quantity{quantity}/page{page}")]
-        public async Task<ActionResult> GetVehicles(int quantity, int page)
+        [HttpGet()]
+        public async Task<ActionResult> GetVehicles([FromQuery]int pageSize = 20, [FromQuery]int page = 0)
         {
-            _logger.LogInformation("Getting list of vehicles with quantity {quantity} and page {page}", quantity, page);
-
-            var vehicles = await _vehicleService.GetListOfVehiclesAsync(quantity, page);
-
-            if (vehicles.Count == 0)
+            if(pageSize > 100) 
             {
-                _logger.LogWarning($"{nameof(GetVehicles)} Count 0");
-                return NotFound();
+                _logger.LogWarning("Page size {pageSize} is too large. Setting to maximum of 100.", pageSize);
+                pageSize = 100;
             }
 
+            _logger.LogInformation("Getting list of vehicles with quantity {quantity} and page {page}", pageSize, page);
+
+            var vehicles = await _vehicleService.GetListOfVehiclesAsync(pageSize, page);
             return Ok(vehicles);
         }
 
