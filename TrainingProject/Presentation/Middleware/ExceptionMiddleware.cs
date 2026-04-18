@@ -32,7 +32,7 @@ namespace TrainingProject.Presentation.Middleware
             var (statusCode, title) = exeption switch
             {
                 ArgumentException => (StatusCodes.Status400BadRequest, "Bad Request"),
-                KeyNotFoundException => (StatusCodes.Status400BadRequest, "NotFound"),
+                KeyNotFoundException => (StatusCodes.Status404NotFound, "NotFound"),
                 UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
             };

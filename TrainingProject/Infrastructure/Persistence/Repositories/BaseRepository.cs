@@ -12,29 +12,29 @@ namespace TrainingProject.Infrastructure.Persistence.Repositories
             _context = context;
             _dbSet = context.Set<T>();
         }
-        public async Task<T> CreateAsync(T vehicle)
+        public async Task<T> CreateAsync(T vehicle, CancellationToken ct)
         {
             _dbSet.Add(vehicle);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(ct);
 
             return vehicle;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id, CancellationToken ct)
         {
-            var vehicle = await _dbSet.FindAsync(id);
+            var vehicle = await _dbSet.FindAsync(id, ct);
 
             if (vehicle is not null)
             {
                 _dbSet.Remove(vehicle);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(ct);
             }
         }
 
-        public async Task<T> GetValueAsync(Guid id)
+        public async Task<T> GetValueAsync(Guid id, CancellationToken ct)
         {
                 
-             var vehicle = await _dbSet.FindAsync(id);
+             var vehicle = await _dbSet.FindAsync(id, ct);
             if(vehicle is null)
             {
                 throw new KeyNotFoundException($"Entity with id {id} not found.");
@@ -43,10 +43,10 @@ namespace TrainingProject.Infrastructure.Persistence.Repositories
             return vehicle;
         }
 
-        public Task UpdateAsync(T vehicle)
+        public Task UpdateAsync(T vehicle, CancellationToken ct)
         {
             _dbSet.Update(vehicle);
-            return _context.SaveChangesAsync();
+            return _context.SaveChangesAsync(ct);
         }
     }
 }

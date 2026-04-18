@@ -2,9 +2,9 @@
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<T> CreateAsync(T vehicle);
-        Task DeleteAsync(Guid id);
-        Task<T> GetValueAsync(Guid id);
-        Task UpdateAsync(T vehicle);
+        Task<T> CreateAsync(T vehicle, CancellationToken ct);
+        Task DeleteAsync(Guid id, CancellationToken ct);
+        Task<T> GetValueAsync(Guid id, CancellationToken ct);
+        Task UpdateAsync(T vehicle, CancellationToken ct);
     }
 }

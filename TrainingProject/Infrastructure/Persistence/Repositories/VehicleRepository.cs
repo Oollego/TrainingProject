@@ -11,37 +11,37 @@ namespace TrainingProject.Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<Vehicle> CreateVehicleAsync(Vehicle vehicle)
+        public async Task<Vehicle> CreateVehicleAsync(Vehicle vehicle, CancellationToken ct)
         {
             vehicle.CreatedAt = DateTime.UtcNow;
             _context.Vehicles.Add(vehicle);
-            await _context.SaveChangesAsync();  
+            await _context.SaveChangesAsync(ct);  
             return vehicle;
         }
 
-        public async Task DeleteVehicleAsync(Guid Id)
+        public async Task DeleteVehicleAsync(Guid Id, CancellationToken ct)
         {
-            var vehicle = await _context.Vehicles.FindAsync(Id);
+            var vehicle = await _context.Vehicles.FindAsync(Id, ct);
 
             if (vehicle is not null)
             {
                 _context.Vehicles.Remove(vehicle);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(ct);
             }
         }
 
-        public async Task<List<Vehicle>> GetVehiclesAsync(int quantity, int page)
+        public async Task<List<Vehicle>> GetVehiclesAsync(CancellationToken ct, int quantity, int page)
         {
-            return await _context.Vehicles.Skip(page * quantity).Take(quantity).ToListAsync();
+            return await _context.Vehicles.Skip(page * quantity).Take(quantity).ToListAsync(ct);
 
         }
 
-        public async Task<Vehicle?> GetVehicleByIdAsync(Guid Id)
+        public async Task<Vehicle?> GetVehicleByIdAsync(Guid Id, CancellationToken ct)
         {
-            return await _context.Vehicles.FirstOrDefaultAsync(x => x.Id == Id);
+            return await _context.Vehicles.FirstOrDefaultAsync(x => x.Id == Id, ct);
         }
 
-        public async Task<int> UpdateVehicleAsync(Vehicle vehicle)
+        public async Task<int> UpdateVehicleAsync(Vehicle vehicle, CancellationToken ct)
         {
             return await _context.Vehicles.Where(x => x.Id == vehicle.Id).ExecuteUpdateAsync(x => x
                 .SetProperty(p => p.Make, vehicle.Make)
@@ -49,7 +49,7 @@ namespace TrainingProject.Infrastructure.Persistence.Repositories
                 .SetProperty(p => p.Year, vehicle.Year)
                 .SetProperty(p => p.Mileage, vehicle.Mileage)
                 .SetProperty(p => p.Price, vehicle.Price)
-            );
+            , ct);
         }
     }
 }

@@ -5,17 +5,12 @@ namespace TrainingProject.Domain.Entities
 {
     public class Vehicle
     {
-        [Key]
-        [Required]
         public Guid Id { get; set; }
 
-        [MaxLength(255)]
         public string Make { get; set; } = null!;
 
-        [MaxLength(128)]
         public string Model { get; set; } = null!;
 
-        [Range(1900, 2100)]
         public int Year { get; set; }
 
         public int Mileage { get; set; }
